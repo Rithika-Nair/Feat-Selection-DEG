@@ -1,0 +1,532 @@
+---
+title: "Multiomics Project"
+format: pdf
+editor: visual
+---
+
+```{r, echo=FALSE}
+library(HDF5Array)
+library(rhdf5)
+```
+
+## GSE71669
+
+Condition: Invasive/Non-invasive Bladder Cancer
+
+Number of samples: 33
+
+Experiments: 3 experiments
+
+```         
+[1] mrna: HDF5Matrix with 19869 rows and 33 columns
+[2] cpg: HDF5Matrix with 27237 rows and 33 columns
+[3] cc: HDF5Matrix with 45 rows and 33 columns
+```
+
+Columns in .RDS:
+
+-   sample name
+
+-   response \[0/1\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_GSE71669 <- readRDS("~/GSE71669/mae_data/mae.rds")
+mae <- mae_GSE71669
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/GSE71669/mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay001")
+
+h5closeAll()
+
+# Read the dataset with gene and sample dimnames
+gene_dimnames_GSE <- h5read("~/GSE71669/mae_data/experiments.h5", "/.assay001_dimnames/1")
+sample_dimnames <- h5read("~/GSE71669/mae_data/experiments.h5", "/.assay001_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+GSE_assay_df <- as.data.frame(t(assay_data))
+rownames(GSE_assay_df) <- sample_dimnames
+colnames(GSE_assay_df) <- gene_dimnames_GSE
+```
+
+## ROSMAP
+
+Condition: –- unknown
+
+Number of samples: 351
+
+Experiments: 3 experiments
+
+```         
+[1] epigenomics: HDF5Matrix with 200 rows and 351 columns
+[2] genomics: HDF5Matrix with 200 rows and 351 columns
+[3] transcriptomics: HDF5Matrix with 200 rows and 351 columns
+```
+
+Columns in .RDS:
+
+-   sample name
+
+-   response \[no/yes\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_rosmap <- readRDS("~/rosmap/mae_data/mae.rds")
+mae <- mae_rosmap
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/rosmap/mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay003")
+
+h5closeAll()
+
+# Read the dataset with gene and sample dimnames
+gene_dimnames_rosmap <- h5read("~/rosmap/mae_data/experiments.h5", "/.assay003_dimnames/1")
+gene_dimnames_rosmap_2 <- h5read("~/rosmap/mae_data/experiments.h5", "/.assay002_dimnames/1")
+gene_dimnames_rosmap_3 <- h5read("~/rosmap/mae_data/experiments.h5", "/.assay001_dimnames/1")
+sample_dimnames <- h5read("~/rosmap/mae_data/experiments.h5", "/.assay003_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+assay_df <- as.data.frame(t(assay_data))
+rownames(assay_df) <- sample_dimnames
+colnames(assay_df) <- gene_dimnames_rosmap
+```
+
+## TCGA-BLCA
+
+Condition: Bladder Urothelial Carcinoma
+
+Number of Samples: 336
+
+Experiments: 4 experiments
+
+```         
+[1] Methylation_Gene_level_HM450K: HDF5Matrix with 20109 rows and 336 columns
+[2] miRNA_Gene_level: HDF5Matrix with 825 rows and 336 columns
+[3] RPPA_Gene_Level: HDF5Matrix with 155 rows and 336 columns
+[4] RNAseq_HiSeq_Gene_level: HDF5Matrix with 20047 rows and 336 
+```
+
+Columns:
+
+-   Age \[int\]
+
+-   Sex \[0/1\]
+
+-   Response \[0/1\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_tcga_blca <- readRDS("~/tcga-blca/tcga-blca_mae_data/mae.rds")
+mae <- mae_tcga_blca
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/tcga-blca/tcga-blca_mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay004")
+
+h5closeAll()
+# Read the dataset with gene and sample dimnames
+gene_dimnames_blca <- h5read("~/tcga-blca/tcga-blca_mae_data/experiments.h5", "/.assay004_dimnames/1")
+sample_dimnames <- h5read("~/tcga-blca/tcga-blca_mae_data/experiments.h5", "/.assay004_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+blca_assay_df <- as.data.frame(t(assay_data))
+rownames(blca_assay_df) <- sample_dimnames
+colnames(blca_assay_df) <- gene_dimnames_blca
+```
+
+## TCGA-BRCA
+
+Condition: Breast invasive carcinoma
+
+Number of Samples: 109
+
+Experiments: 4 experiments
+
+```         
+[1] Methylation_Gene_level_HM450K: HDF5Matrix with 20106 rows and 109 columns
+[2] miRNA_GA_Gene_level: HDF5Matrix with 754 rows and 109 columns
+[3] RPPA_Gene_level: HDF5Matrix with 175 rows and 109 columns
+[4] RNAseq_HiSeq_Gene_level: HDF5Matrix with 20155 rows and 109 co
+```
+
+Columns:
+
+-   Age \[int\]
+
+-   Sex \[0\]
+
+-   Response \[0/1\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_tcga_brca <- readRDS("~/tcga-brca/tcga-brca_mae_data/mae.rds")
+mae <- mae_tcga_brca
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/tcga-brca/tcga-brca_mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay004")
+
+h5closeAll()
+# Read the dataset with gene and sample dimnames
+gene_dimnames_brca <- h5read("~/tcga-brca/tcga-brca_mae_data/experiments.h5", "/.assay004_dimnames/1")
+sample_dimnames<- h5read("~/tcga-brca/tcga-brca_mae_data/experiments.h5", "/.assay004_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+brca_assay_df <- as.data.frame(t(assay_data))
+rownames(brca_assay_df) <- sample_dimnames
+colnames(brca_assay_df) <- gene_dimnames_brca
+```
+
+## TCGA-KIPAN
+
+Condition: Pan-kidney cohort (Kidney Chromophobe + Kidney renal clear cell carcinoma + Kidney renal papillary cell carcinoma)
+
+Number of Samples: 123
+
+Experiments: 4 experiments
+
+```         
+ [1] Methylation_Gene_level_HM450K: HDF5Matrix with 20116 rows and 123 columns
+ [2] miRNA_GA_miRgene_level: HDF5Matrix with 721 rows and 123 columns
+ [3] RPPA_Gene_Level: HDF5Matrix with 166 rows and 123 columns
+ [4] RNAseq_HiSeq_Gene_level: HDF5Matrix with 20190 rows and 123 columns
+```
+
+Columns:
+
+-   Age \[int\]
+
+-   Sex \[0/1\]
+
+-   Response \[0/1\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_tcga_kipan <- readRDS("~/tcga-kipan/tcga-kipan_mae_data/mae.rds")
+mae <- mae_tcga_kipan
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/tcga-kipan/tcga-kipan_mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay004")
+
+h5closeAll()
+# Read the dataset with gene and sample dimnames
+gene_dimnames_kipan <- h5read("~/tcga-kipan/tcga-kipan_mae_data/experiments.h5", "/.assay004_dimnames/1")
+sample_dimnames<- h5read("~/tcga-kipan/tcga-kipan_mae_data/experiments.h5", "/.assay004_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+kipan_assay_df <- as.data.frame(t(assay_data))
+rownames(kipan_assay_df) <- sample_dimnames
+colnames(kipan_assay_df) <- gene_dimnames_kipan
+```
+
+## TCGA-THCA
+
+Condition: Thyroid carcinoma
+
+Number of Samples: 217
+
+Experiments: 4 experiments
+
+```         
+[1] Methylation_Gene_level_HM450K: HDF5Matrix with 20118 rows and 217 columns
+[2] miRNA_Gene_level: HDF5Matrix with 808 rows and 217 columns
+[3] RPPA_Gene_Level: HDF5Matrix with 134 rows and 217 columns
+[4] RNAseq_HiSeq_Gene_level: HDF5Matrix with 19927 rows and 217 columns
+```
+
+Columns:
+
+-   Age \[int\]
+
+-   Sex \[0/1\]
+
+-   Response \[0/1\]
+
+```{r}
+# Load the MAE object from your .rds file
+mae_tcga_thca <- readRDS("~/tcga-thca/tcga-thca_mae_data/mae.rds")
+mae <- mae_tcga_thca
+
+# # Check the class of the object
+# class(mae)
+# 
+# # Print the summary of the MAE object
+# summary(mae)
+# 
+# # List all assays (experiments) contained in the MAE object
+# experiments(mae)
+# 
+# # Get a quick overview of the metadata associated with samples (colData)
+# colData(mae)
+# metadata(mae)
+
+# Open the HDF5 file
+h5_file <- HDF5Array::H5File("~/tcga-thca/tcga-thca_mae_data/experiments.h5")
+h5_file
+
+# Load the HDF5 file containing assay data (if it's separate from the RDS)
+h5_contents <- h5ls(h5_file)
+
+# get assay data from mrna dataset 
+assay_data <- h5mread(h5_file, "assay004")
+
+h5closeAll()
+# Read the dataset with gene and sample dimnames
+gene_dimnames_thca <- h5read("~/tcga-thca/tcga-thca_mae_data/experiments.h5", "/.assay004_dimnames/1")
+sample_dimnames<- h5read("~/tcga-thca/tcga-thca_mae_data/experiments.h5", "/.assay004_dimnames/2")
+
+# convert assay data into a dataframe with genes as columns and sample names as rows
+class(assay_data)
+thca_assay_df <- as.data.frame(t(assay_data))
+rownames(thca_assay_df) <- sample_dimnames
+colnames(thca_assay_df) <- gene_dimnames_thca
+```
+
+### HDF5Matrix
+
+```         
+Methylation_Gene_level_HM450K: 20118 217
+miRNA_Gene_level             : 808 217
+RPPA_Gene_Level              : 134 217
+RNAseq_HiSeq_Gene_level      : 19927 217
+```
+
+## Loading DE_Prior and applying to Assay Data
+
+```{r}
+
+# loading the de_prior list
+de_prior <- readr::read_delim("~/DE_Prior.txt", delim = "\t")
+
+summary(de_prior)
+
+hist(de_prior$DE_Prior_Rank)
+```
+
+### TCGA BLCA Dataset
+
+```{r}
+
+# checking the number of genes shared between de_prior list and assay data
+common_genes <- de_prior[de_prior$Gene_Name %in% gene_dimnames_blca, ]
+# head(common_genes)
+summary(common_genes)
+
+# checking the number of genes only in de_prior list and not assay data
+genes_only_in_prior <- setdiff(de_prior$Gene_Name, gene_dimnames_blca)
+# head(genes_only_in_prior)
+# length(genes_only_in_prior)
+
+# checking the number of genes only in assay data and not de_prior list
+## this is the number of genes after the feature selection?
+genes_only_in_assay <- setdiff(gene_dimnames_blca, de_prior$Gene_Name)
+# head(genes_only_in_assay)
+# length(genes_only_in_assay)
+
+# creating a table with the number of common genes & number of genes in assay data after removing de_prior list
+genes_info_table <- data.frame(dataset = "TCGA BLCA", common_genes_count = nrow(common_genes), assay_only_genes_count = length(genes_only_in_assay))
+
+```
+
+### TCGA BRCA Dataset
+
+```{r}
+
+# checking the number of genes shared between de_prior list and assay data
+common_genes <- de_prior[de_prior$Gene_Name %in% gene_dimnames_brca, ]
+head(common_genes)
+summary(common_genes)
+
+# checking the number of genes only in de_prior list and not assay data
+genes_only_in_prior <- setdiff(de_prior$Gene_Name, gene_dimnames_brca)
+head(genes_only_in_prior)
+summary(genes_only_in_prior)
+
+# checking the number of genes only in assay data and not de_prior list
+## this is the number of genes after the feature selection?
+genes_only_in_assay <- setdiff(gene_dimnames_brca, de_prior$Gene_Name)
+head(genes_only_in_assay)
+summary(genes_only_in_assay)
+
+# adding to gene_info_table with the number of common genes & number of genes in assay data after removing de_prior list
+genes_info_table <- rbind(genes_info_table, data.frame(dataset = "TCGA BRCA", common_genes_count = nrow(common_genes), assay_only_genes_count = length(genes_only_in_assay)))
+```
+
+### TCGA KIPAN Dataset
+
+```{r}
+
+# checking the number of genes shared between de_prior list and assay data
+common_genes <- de_prior[de_prior$Gene_Name %in% gene_dimnames_kipan, ]
+head(common_genes)
+summary(common_genes)
+
+# checking the number of genes only in de_prior list and not assay data
+genes_only_in_prior <- setdiff(de_prior$Gene_Name, gene_dimnames_kipan)
+head(genes_only_in_prior)
+summary(genes_only_in_prior)
+
+# checking the number of genes only in assay data and not de_prior list
+## this is the number of genes after the feature selection?
+genes_only_in_assay <- setdiff(gene_dimnames_blca, de_prior$Gene_Name)
+head(genes_only_in_assay)
+summary(genes_only_in_assay)
+
+# adding to gene_info_table with the number of common genes & number of genes in assay data after removing de_prior list
+genes_info_table <- rbind(genes_info_table, data.frame(dataset = "TCGA KIPAN", common_genes_count = nrow(common_genes), assay_only_genes_count = length(genes_only_in_assay)))
+```
+
+### TCGA THCA Dataset
+
+```{r}
+
+# checking the number of genes shared between de_prior list and assay data
+common_genes <- de_prior[de_prior$Gene_Name %in% gene_dimnames_thca, ]
+head(common_genes)
+summary(common_genes)
+
+# checking the number of genes only in de_prior list and not assay data
+genes_only_in_prior <- setdiff(de_prior$Gene_Name, gene_dimnames_thca)
+head(genes_only_in_prior)
+summary(genes_only_in_prior)
+
+# checking the number of genes only in assay data and not de_prior list
+## this is the number of genes after the feature selection?
+genes_only_in_assay <- setdiff(gene_dimnames_thca, de_prior$Gene_Name)
+head(genes_only_in_assay)
+summary(genes_only_in_assay)
+
+# adding to gene_info_table with the number of common genes & number of genes in assay data after removing de_prior list
+genes_info_table <- rbind(genes_info_table, data.frame(dataset = "TCGA THCA", common_genes_count = nrow(common_genes), assay_only_genes_count = length(genes_only_in_assay)))
+
+print(genes_info_table)
+```
+
+### GSE71669 Dataset
+
+```{r}
+gene_dimnames_GSE71669 <- readr::read_delim("~/mapping_output.txt", delim = "\t")
+# checking the number of genes shared between de_prior list and assay data
+common_genes <- de_prior[de_prior$Gene_Name %in% gene_dimnames_GSE71669$hgnc_symbol, ]
+# head(common_genes)
+# summary(common_genes)
+
+# checking the number of genes only in de_prior list and not assay data
+genes_only_in_prior <- setdiff(de_prior$Gene_Name, gene_dimnames_GSE71669$hgnc_symbol)
+# head(genes_only_in_prior)
+# summary(genes_only_in_prior)
+
+# checking the number of genes only in assay data and not de_prior list
+## this is the number of genes after the feature selection?
+genes_only_in_assay <- setdiff(gene_dimnames_GSE71669$hgnc_symbol, de_prior$Gene_Name)
+# head(genes_only_in_assay)
+# summary(genes_only_in_assay)
+
+# adding to gene_info_table with the number of common genes & number of genes in assay data after removing de_prior list
+genes_info_table <- rbind(genes_info_table, data.frame(dataset = "GSE71669", common_genes_count = nrow(common_genes), assay_only_genes_count = length(genes_only_in_assay)))
+
+print(genes_info_table)
+```
